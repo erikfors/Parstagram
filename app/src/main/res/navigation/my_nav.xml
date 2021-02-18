@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/timeLineFragment">
+
+    <fragment
+        android:id="@+id/timeLineFragment"
+        android:name="com.fors.erik.parstagram.fragments.TimeLineFragment"
+        android:label="fragment_time_line"
+        tools:layout="@layout/fragment_time_line" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.fors.erik.parstagram.fragments.CreatePostFragment"
+        android:label="fragment_create_post"
+        tools:layout="@layout/fragment_create_post" />
+    <fragment
+        android:id="@+id/userSettingsFragment"
+        android:name="com.fors.erik.parstagram.fragments.UserSettingsFragment"
+        android:label="fragment_user_settings"
+        tools:layout="@layout/fragment_user_settings" />
+
+</navigation>
