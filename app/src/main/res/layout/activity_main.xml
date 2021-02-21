@@ -15,14 +15,13 @@
         android:layout_height="wrap_content"
         />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/fragmentNav"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/include"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/my_nav" />
+        android:layout_above="@+id/bnvBottomNavigation"
+        android:layout_below="@+id/include" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bnvBottomNavigation"

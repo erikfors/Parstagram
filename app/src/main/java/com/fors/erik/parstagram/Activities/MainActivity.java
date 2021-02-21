@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-                switchIcons(item.getItemId());
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentNav, selectedFragment).commit();
 
@@ -67,39 +66,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //showing the timeline as default
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentNav, new TimeLineFragment()).commit();
-
-        //getting all the post
-        //queryPost();
-    }
-
-    private void switchIcons(int itemId) {
+       getSupportFragmentManager().beginTransaction().replace(R.id.fragmentNav, new TimeLineFragment()).commit();
 
     }
 
-    //gets all the posts
-    private void queryPost() {
 
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
 
-                //something went wrong
-                if(e != null){
-                    Log.e(TAG,"There was a problem loading the posts!!", e);
-                    Toast.makeText(MainActivity.this, "There was a problem loading the posts", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //this succeed
-
-                //going throgh all the posts
-                for(Post post : posts){
-                    Log.i(TAG,"Post: " + post.getDescription());
-                }
-            }
-        });
-    }
 }
