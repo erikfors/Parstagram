@@ -179,6 +179,7 @@ public class CreatePostFragment extends Fragment {
 
                 //save successful
                 Log.i(TAG,"Post save was a success");
+                Toast.makeText(getContext(), "Post uploaded successfully!", Toast.LENGTH_SHORT).show();
                 //clearing fields
                 etDescription.setText("");
                 ivPostImage.setImageResource(0);

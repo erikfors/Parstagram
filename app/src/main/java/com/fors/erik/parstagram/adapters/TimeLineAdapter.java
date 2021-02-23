@@ -68,8 +68,17 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             tvDescription.setText(post.getDescription());
             tvUserName.setText(post.getUser().getUsername());
             ParseFile image = post.getImage();
+            ParseFile profileImage = (ParseFile) post.getUser().get("profile_picture");
+
             if(image != null) {
                 Glide.with(context).load(post.getImage().getUrl()).into(ivPost);
+            }
+
+            if(profileImage != null){
+                Glide.with(context).load(profileImage.getUrl()).placeholder(context.getDrawable(R.drawable.avatar)).into(ivProfilePic);
+            }
+            else {
+                ivProfilePic.setImageResource(R.drawable.avatar);
             }
 
         }

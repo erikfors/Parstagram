@@ -3,17 +3,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.UserSettingsFragment"
-    android:background="@color/cardview_light_background"
-    >
+    android:background="@color/cardview_light_background">
 
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="logout"
-        android:layout_gravity="center"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="100dp">
+
+
+            <ImageView
+                android:id="@+id/ivUserProfileAccount"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/avatar" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignBottom="@+id/cvContainer"
+            android:layout_alignEnd="@+id/cvContainer"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <TextView
+            android:id="@+id/tvUserNameAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@+id/cvContainer"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            tools:text="Pedro Hernandez" />
+
+        <TextView
+            android:id="@+id/label_since"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserNameAccount"
+            android:layout_alignParentEnd="true"
+            android:textStyle="bold"
+            android:layout_toEndOf="@+id/cvContainer"
+            android:layout_marginTop="8dp"
+            android:textSize="16dp"
+            android:text="User Since:" />
+
+        <TextView
+            android:id="@+id/tvDateOfStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/label_since"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_toEndOf="@+id/cvContainer"
+            android:textSize="16dp"
+            tools:text="23 Feb 2021 at 00:23:10 UTC" />
+
+
+        <Button
+            android:id="@+id/btnLogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/tvDateOfStart"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/design_default_color_error"
+            android:layout_alignBottom="@+id/cvContainer"
+            android:layout_toEndOf="@+id/cvContainer"
+            android:text="log out" />
+
+    </RelativeLayout>
 
 </FrameLayout>
