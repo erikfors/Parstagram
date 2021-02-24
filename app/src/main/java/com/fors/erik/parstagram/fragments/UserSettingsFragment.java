@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,13 +26,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.fors.erik.parstagram.Activities.LoginActivity;
+import com.fors.erik.parstagram.Models.Post;
 import com.fors.erik.parstagram.R;
+import com.fors.erik.parstagram.adapters.TimeLineAdapter;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -45,12 +54,15 @@ public class UserSettingsFragment extends Fragment {
     private File photoFile;
     private String photoFileName = "photo.jpg";
     ParseUser parseUser;
+    TimeLineAdapter timeLineAdapter;
+    private List<Post> userPostList;
 
     //widgets
     Button btnLogOut;
     ImageView ivUserProfilePicture;
     TextView tvUserName;
     TextView tvStartDate;
+    RecyclerView rvUserPosts;
 
     public UserSettingsFragment() {
         // Required empty public constructor
@@ -65,16 +77,32 @@ public class UserSettingsFragment extends Fragment {
 
         //initializing variables
         parseUser = ParseUser.getCurrentUser();
+        userPostList = new ArrayList<>();
+        timeLineAdapter = new TimeLineAdapter(getContext(),userPostList);
         
         //finding view by id
         btnLogOut = view.findViewById(R.id.btnLogOut);
         ivUserProfilePicture = view.findViewById(R.id.ivUserProfileAccount);
         tvUserName = view.findViewById(R.id.tvUserNameAccount);
         tvStartDate = view.findViewById(R.id.tvDateOfStart);
+        rvUserPosts = view.findViewById(R.id.rvUserPosts);
+
+        //setting adapter
+        rvUserPosts.setAdapter(timeLineAdapter);
+        //set layout manager
+        rvUserPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        queryPost();
 
         //setting widgets
         tvUserName.setText(parseUser.getUsername());
-        tvStartDate.setText(parseUser.getCreatedAt().toString());
+
+        //setting date format
+        String pattern = "E, dd MMMM yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date = simpleDateFormat.format(parseUser.getCreatedAt());
+
+        tvStartDate.setText(date);
 
         //setting user picture if user has one
         ParseFile userProfilePic = (ParseFile) parseUser.get(PROFILE_PICTURE);
@@ -103,6 +131,39 @@ public class UserSettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
+    private void queryPost() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.setLimit(20);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+
+                //something went wrong
+                if(e != null){
+                    Log.e(TAG,"There was a problem loading the posts!!", e);
+                    Toast.makeText(getContext(), "There was a problem loading the posts", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //this succeed
+
+                //going throgh all the posts
+                for(Post post : posts){
+                    Log.i(TAG,"Post: " + post.getDescription());
+                }
+
+                //add all
+                userPostList.addAll(posts);
+                //notify adapter
+                timeLineAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

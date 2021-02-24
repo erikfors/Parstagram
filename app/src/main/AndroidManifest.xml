@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.MainActivity"></activity>
+        <activity android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.codepath.fileprovider"

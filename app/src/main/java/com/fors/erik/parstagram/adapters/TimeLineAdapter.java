@@ -15,6 +15,7 @@ import com.fors.erik.parstagram.Models.Post;
 import com.fors.erik.parstagram.R;
 import com.parse.ParseFile;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder> {
@@ -54,6 +55,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         ImageView ivPost;
         TextView tvUserName;
         TextView tvDescription;
+        TextView tvDateTime;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -61,12 +63,18 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             ivPost = itemView.findViewById(R.id.ivPost);
             tvUserName = itemView.findViewById(R.id.tvUsername);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvDateTime = itemView.findViewById(R.id.tvDateTime);
         }
 
         public void bind(Post post) {
+
+            String pattern = "MMM dd, yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            String date = simpleDateFormat.format(post.getCreatedDate());
             //bind post
             tvDescription.setText(post.getDescription());
             tvUserName.setText(post.getUser().getUsername());
+            tvDateTime.setText(date);
             ParseFile image = post.getImage();
             ParseFile profileImage = (ParseFile) post.getUser().get("profile_picture");
 
