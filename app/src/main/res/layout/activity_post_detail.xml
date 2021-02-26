@@ -119,11 +119,52 @@
         android:textSize="20dp"
         android:text="Comments:" />
 
-    <ListView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/commentsLabel"
+        android:weightSum="100">
+
+        <ListView
         android:id="@+id/lvComments"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/commentsLabel"
-        android:layout_marginStart="4dp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+            android:layout_weight="95"
+         />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="4dp"
+            android:layout_weight="5"
+            android:weightSum="100"
+            >
+
+                <EditText
+                android:id="@+id/etCommentBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter a comment"
+                android:layout_weight="90"/>
+
+            <Button
+                android:id="@+id/btnPostComment"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:textColor="@color/design_default_color_primary"
+                android:text="Post" />
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>

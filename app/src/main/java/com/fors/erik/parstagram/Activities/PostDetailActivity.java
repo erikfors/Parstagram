@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +22,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,8 @@ public class PostDetailActivity extends AppCompatActivity {
     TextView tvDescription;
     TextView tvTimeStamp;
     ListView listView;
+    EditText etCommentBox;
+    Button btnPostComment;
 
     //variables
     private Post post;
@@ -60,6 +67,8 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvDescriptionDetail);
         tvTimeStamp = findViewById(R.id.tvTimeStampDetail);
         listView = findViewById(R.id.lvComments);
+        etCommentBox = findViewById(R.id.etCommentBox);
+        btnPostComment = findViewById(R.id.btnPostComment);
 
         commentsAdapter = new CommentAdapter(this, R.layout.comment, commentList);
 
@@ -113,8 +122,56 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDescription.setText(post.getDescription());
         tvTimeStamp.setText(post.getCreatedDate().toString());
 
+        btnPostComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postAComent();
+            }
+        });
+
         //get comments
         loadComments();
+    }
+
+    private void postAComent() {
+
+        //get edit text text
+        String comment = etCommentBox.getText().toString();
+        //validate that it is not empty
+        if(comment.isEmpty()){
+            Toast.makeText(this,"Comment can not be empty!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //post comment
+        postCommentQuery(comment);
+    }
+
+    private void postCommentQuery(String text) {
+        //create comment
+        Comment comment = new Comment();
+        comment.setComment(text);
+        comment.setPost(post);
+        comment.setUser(ParseUser.getCurrentUser());
+
+        //save in background
+        comment.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+
+                //something went wrong
+                if(e != null){
+                    Log.e(TAG,"There was a problem posting the comment!", e);
+                    Toast.makeText(PostDetailActivity.this, "There was a problem posting the comment!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //clear text
+                etCommentBox.setText("");
+                //add comment to UI
+                commentsAdapter.add(comment);
+
+            }
+        });
     }
 
     private void loadComments() {

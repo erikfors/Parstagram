@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,6 +62,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         TextView tvDescription;
         TextView tvDateTime;
         TextView tvUserNameInDescription;
+        ImageButton ibCommentButton;
+        TextView tvViewAllComments;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -70,6 +73,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvDateTime = itemView.findViewById(R.id.tvDateTime);
             tvUserNameInDescription = itemView.findViewById(R.id.tvUsernameInDescription);
+            ibCommentButton = itemView.findViewById(R.id.ibComment);
+            tvViewAllComments = itemView.findViewById(R.id.tvViewAllComments);
         }
 
         public void bind(Post post) {
@@ -98,6 +103,20 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
             //send user to post detail
             ivPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendToDetailScreen(post.getId());
+                }
+            });
+
+            ibCommentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendToDetailScreen(post.getId());
+                }
+            });
+
+            tvViewAllComments.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     sendToDetailScreen(post.getId());
