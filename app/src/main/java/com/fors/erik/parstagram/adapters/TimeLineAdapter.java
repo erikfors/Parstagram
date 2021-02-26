@@ -78,6 +78,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         ImageButton ibLikeButton;
         ImageButton ibCommentButton;
         TextView tvViewAllComments;
+        TextView tvnumberOfLikes;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -90,6 +91,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             ibCommentButton = itemView.findViewById(R.id.ibComment);
             tvViewAllComments = itemView.findViewById(R.id.tvViewAllComments);
             ibLikeButton = itemView.findViewById(R.id.ibLike);
+            tvnumberOfLikes = itemView.findViewById(R.id.tvNumberOfLikes);
         }
 
         public void bind(Post post) {
@@ -98,10 +100,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             if (!post.isLikedByUser){
                 seeIfPostIsLikedByUser(post);
                 ibLikeButton.setImageDrawable(context.getDrawable(R.drawable.ufi_heart));
+                tvnumberOfLikes.setText("0 Likes");
             }
             else {
                 Drawable mIcon = context.getDrawable(R.drawable.filled_hearth);
                 ibLikeButton.setImageDrawable(mIcon);
+                tvnumberOfLikes.setText(post.numberOfLikes + " Likes");
             }
 
             String pattern = "MMM dd, yyyy";
@@ -193,7 +197,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                     }
 
                     post.isLikedByUser = false;
+                    post.numberOfLikes--;
 
+                    tvnumberOfLikes.setText(post.numberOfLikes + " Likes");
                     ibLikeButton.setImageDrawable(context.getDrawable(R.drawable.ufi_heart));
                 }
             });
@@ -219,7 +225,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
                     Log.i(TAG,"Post " + post.getId() + "was liked by " + ParseUser.getCurrentUser().getUsername());
                     post.isLikedByUser = true;
+                    post.numberOfLikes++;
 
+                    tvnumberOfLikes.setText(post.numberOfLikes + " Likes");
                     Drawable mIcon = context.getDrawable(R.drawable.filled_hearth);
                     ibLikeButton.setImageDrawable(mIcon);
 
@@ -243,6 +251,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                         Toast.makeText(context, "There was a problem loading the likes", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    tvnumberOfLikes.setText(likes.size() + " Likes");
+                    post.numberOfLikes = likes.size();
 
                     for(Like oneLike : likes){
                         if(oneLike.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {

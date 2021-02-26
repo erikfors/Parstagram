@@ -19,6 +19,7 @@ public class Post extends ParseObject {
     public static final String KEY_OBJECT_ID = "objectId";
 
     public boolean isLikedByUser = false;
+    public int numberOfLikes = 0;
 
     public String getDescription(){
         return getString(KEY_DESCRIPTION);
