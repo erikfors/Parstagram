@@ -1,6 +1,7 @@
 package com.fors.erik.parstagram.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fors.erik.parstagram.Models.Post;
+import com.fors.erik.parstagram.Activities.PostDetailActivity;
 import com.fors.erik.parstagram.R;
 import com.parse.ParseFile;
 
@@ -19,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder> {
+
+    public static final String TAG = "TimeLineAdapter";
 
     private Context context;
     private List<Post> posts;
@@ -56,6 +60,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         TextView tvUserName;
         TextView tvDescription;
         TextView tvDateTime;
+        TextView tvUserNameInDescription;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
@@ -64,6 +69,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             tvUserName = itemView.findViewById(R.id.tvUsername);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvDateTime = itemView.findViewById(R.id.tvDateTime);
+            tvUserNameInDescription = itemView.findViewById(R.id.tvUsernameInDescription);
         }
 
         public void bind(Post post) {
@@ -74,6 +80,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             //bind post
             tvDescription.setText(post.getDescription());
             tvUserName.setText(post.getUser().getUsername());
+            tvUserNameInDescription.setText(post.getUser().getUsername());
             tvDateTime.setText(date);
             ParseFile image = post.getImage();
             ParseFile profileImage = (ParseFile) post.getUser().get("profile_picture");
@@ -89,6 +96,22 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 ivProfilePic.setImageResource(R.drawable.avatar);
             }
 
+            //send user to post detail
+            ivPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendToDetailScreen(post.getId());
+                }
+            });
+
+        }
+
+        private void sendToDetailScreen(String postID) {
+            Intent i = new Intent(context, PostDetailActivity.class);
+
+            i.putExtra("postID", postID);
+
+            context.startActivity(i);
         }
     }
 }

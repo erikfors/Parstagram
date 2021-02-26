@@ -2,6 +2,7 @@ package com.fors.erik.parstagram;
 
 import android.app.Application;
 
+import com.fors.erik.parstagram.Models.Comment;
 import com.fors.erik.parstagram.Models.Post;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -15,6 +16,7 @@ public class ParseApplication extends Application {
 
         // Register your parse models
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(Comment.class);
 
         // set applicationId, and server server based on the values in the back4app settings.
         // any network interceptors must be added with the Configuration Builder given this syntax

@@ -65,30 +65,47 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/ivPost"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ufi_heart"
             android:background="@color/cardview_light_background"
-            android:layout_marginHorizontal="16dp"/>
+            />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/cardview_light_background"
+            android:layout_marginStart="16dp"
             android:src="@drawable/ufi_comment" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llLayout2"
+        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/tvUsernameInDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            tools:text="pedrito26" />
 
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_below="@+id/llLayout2"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="4dp"
         tools:text="This is a description" />
+
+    </LinearLayout>
 
 </RelativeLayout>
