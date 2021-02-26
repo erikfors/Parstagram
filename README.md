@@ -2,7 +2,7 @@
 
 **Pastagram** is a photo sharing app similar to Instagram but using Parse as its backend.
 
-Time spent: **10** hours spent in total
+Time spent: **13** hours spent in total
 
 ## User Stories
 
@@ -35,11 +35,11 @@ The following **optional** features are implemented:
 - [x] Style the feed to look like the real Instagram feed.
 - [x] User can load more posts once he or she reaches the bottom of the feed using infinite scrolling.
 - [x] Show the username and creation time for each post.
-- [ ] User can tap a post to view post details, including timestamp and caption.
+- [x] User can tap a post to view post details, including timestamp and caption.
 - [x] Allow the logged in user to add a profile photo
 - [x] Display the profile photo with each post
 - [ ] Tapping on a post's username or profile photo goes to that user's profile page and shows a grid view of the user's posts 
-- [ ] User can comment on a post and see all comments for each post in the post details screen.
+- [x] User can comment on a post and see all comments for each post in the post details screen.
 - [ ] User can like a post and see number of likes for each post in the post details screen.
 
 The following **additional** features are implemented:
