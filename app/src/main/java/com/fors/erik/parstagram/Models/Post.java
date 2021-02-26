@@ -18,6 +18,8 @@ public class Post extends ParseObject {
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_OBJECT_ID = "objectId";
 
+    public boolean isLikedByUser = false;
+
     public String getDescription(){
         return getString(KEY_DESCRIPTION);
     }

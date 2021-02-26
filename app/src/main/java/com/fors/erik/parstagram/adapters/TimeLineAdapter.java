@@ -2,21 +2,34 @@ package com.fors.erik.parstagram.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.fors.erik.parstagram.Models.Like;
 import com.fors.erik.parstagram.Models.Post;
 import com.fors.erik.parstagram.Activities.PostDetailActivity;
 import com.fors.erik.parstagram.R;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -62,6 +75,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         TextView tvDescription;
         TextView tvDateTime;
         TextView tvUserNameInDescription;
+        ImageButton ibLikeButton;
         ImageButton ibCommentButton;
         TextView tvViewAllComments;
 
@@ -75,9 +89,20 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             tvUserNameInDescription = itemView.findViewById(R.id.tvUsernameInDescription);
             ibCommentButton = itemView.findViewById(R.id.ibComment);
             tvViewAllComments = itemView.findViewById(R.id.tvViewAllComments);
+            ibLikeButton = itemView.findViewById(R.id.ibLike);
         }
 
         public void bind(Post post) {
+
+            //checking to see if the post is liked
+            if (!post.isLikedByUser){
+                seeIfPostIsLikedByUser(post);
+                ibLikeButton.setImageDrawable(context.getDrawable(R.drawable.ufi_heart));
+            }
+            else {
+                Drawable mIcon = context.getDrawable(R.drawable.filled_hearth);
+                ibLikeButton.setImageDrawable(mIcon);
+            }
 
             String pattern = "MMM dd, yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -123,6 +148,112 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 }
             });
 
+            ibLikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //if post is already liked, get rid of the like
+                    //else like the post
+                    if(post.isLikedByUser){
+                        removeLike(post);
+                    }
+                    else{
+                        likePost(post);
+                    }
+
+                }
+            });
+
+        }
+
+        private void removeLike(Post post) {
+
+            //getting post that are older than lattest date loaded
+            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+            query.whereEqualTo(Like.KEY_POST, post);
+            query.whereEqualTo(Like.KEY_USER,ParseUser.getCurrentUser());
+            query.getFirstInBackground(new GetCallback<Like>() {
+                @Override
+                public void done(Like like, ParseException e) {
+
+                    //something went wrong
+                    if(e != null){
+                        Log.e(TAG,"There was a problem disliking!", e);
+                        Toast.makeText(context, "There was a problem disliking", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    try {
+                        like.delete();
+                    } catch (ParseException parseException) {
+                        parseException.printStackTrace();
+                        Log.e(TAG,"There was a problem disliking!", e);
+                        Toast.makeText(context, "There was a problem disliking", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    post.isLikedByUser = false;
+
+                    ibLikeButton.setImageDrawable(context.getDrawable(R.drawable.ufi_heart));
+                }
+            });
+
+        }
+
+        private void likePost(Post post) {
+
+            Like newLike = new Like();
+            newLike.setPost(post);
+            newLike.setUser(ParseUser.getCurrentUser());
+
+            newLike.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+
+                    //something went wrong
+                    if(e != null){
+                        Log.e(TAG,"There was a problem liking the post!!", e);
+                        Toast.makeText(context, "There was a problem liking the post", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Log.i(TAG,"Post " + post.getId() + "was liked by " + ParseUser.getCurrentUser().getUsername());
+                    post.isLikedByUser = true;
+
+                    Drawable mIcon = context.getDrawable(R.drawable.filled_hearth);
+                    ibLikeButton.setImageDrawable(mIcon);
+
+                }
+            });
+        }
+
+        private void seeIfPostIsLikedByUser(Post post) {
+            //getting post that are older than lattest date loaded
+            ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+            query.include(Like.KEY_USER);
+            query.whereEqualTo(Like.KEY_POST, post);
+
+            query.findInBackground(new FindCallback<Like>() {
+                @Override
+                public void done(List<Like> likes, ParseException e) {
+
+                    //something went wrong
+                    if(e != null){
+                        Log.e(TAG,"There was a problem loading the likes!!", e);
+                        Toast.makeText(context, "There was a problem loading the likes", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    for(Like oneLike : likes){
+                        if(oneLike.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                            Drawable mIcon = context.getDrawable(R.drawable.filled_hearth);
+                            ibLikeButton.setImageDrawable(mIcon);
+                            post.isLikedByUser = true;
+                        }
+                    }
+
+                }
+            });
         }
 
         private void sendToDetailScreen(String postID) {

@@ -96,7 +96,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Log.d(TAG,"!!!!!!!!!" + objects);
 
                 //get post
                 post = objects.get(0);
